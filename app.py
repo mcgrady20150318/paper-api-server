@@ -1,5 +1,5 @@
 from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.chains import RetrievalQA, ConversationalRetrievalChain
+from langchain.chains import RetrievalQA
 from langchain.prompts import PromptTemplate
 from langchain.llms import OpenAI
 from flask import Flask, request, jsonify, Response
@@ -10,8 +10,7 @@ from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from langchain.schema.output import LLMResult
 from typing import Any
 import threading
-from langchain.vectorstores import Pinecone
-import pinecone
+from langchain.vectorstores.redis import Redis
 
 app = Flask(__name__)
 CORS(app)
@@ -19,14 +18,7 @@ CORS(app)
 os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
 
-pinecone.init(
-    api_key=os.getenv("PINECONE_API_KEY"),  # find at app.pinecone.io
-    environment=os.getenv("PINECONE_ENV"),  # next to api key in console
-)
-
 embeddings = OpenAIEmbeddings()
-index_name = 'qaoverpaper'
-vector_index = Pinecone.from_existing_index(index_name, embeddings)
 
 prompt_template = """你现在是一个人工智能学者，请根据以下内容。
     {context}，
@@ -62,7 +54,8 @@ class ChainStreamHandler(StreamingStdOutCallbackHandler):
 
 def qa(query,id):
     handler = ChainStreamHandler()
-    retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 1,"filter":{'source':'./%s/%s.pdf' % (id,id)}})
+    vector_index = Redis.from_existing_index(embeddings,index_name=id,redis_url=os.getenv('REDIS_URI'),schema="redis_schema.yaml")
+    retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 1})
     chain_type_kwargs = {"prompt": PROMPT}
     qa_interface = RetrievalQA.from_chain_type(
         llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler])),
