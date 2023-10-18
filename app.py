@@ -79,7 +79,7 @@ def async_run(qa_interface,query):
 
 @app.route('/', methods=['GET'])
 def _index():
-    return 'hello world'
+    return 'hello qa'
 
 @app.route('/q', methods=['POST'])
 def q():
