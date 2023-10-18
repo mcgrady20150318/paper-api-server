@@ -16,10 +16,8 @@ import pinecone
 app = Flask(__name__)
 CORS(app)
 
-os.environ["OPENAI_API_KEY"] = "mk-WOb5xz6NB9NfXJM6REnzs4RGqcdYe0Q64hnbLulzPOEAXiP0"
-os.environ['OPENAI_API_BASE'] = 'https://api.aiproxy.io/v1'
-os.environ["PINECONE_API_KEY"] = 'aca32600-be4c-42a1-959f-689de12a2d13'
-os.environ["PINECONE_ENV"] = 'gcp-starter'
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
+os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
 
 pinecone.init(
     api_key=os.getenv("PINECONE_API_KEY"),  # find at app.pinecone.io
