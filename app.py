@@ -20,17 +20,14 @@ os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
 
 embeddings = OpenAIEmbeddings()
 
-prompt_template = """你现在是一个人工智能学者，请根据以下内容。
-    {context}，
-    回答问题: {question}
-    中文答案是:"""
+prompt_template = """You are an AI expert，please uses the following paper content
+    {context}，to answer the question: {question} the answer is: """
 
 PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
 
 class ChainStreamHandler(StreamingStdOutCallbackHandler):
     def __init__(self):
         self.tokens = []
-        # 记得结束后这里置true
         self.finish = False
 
     def on_llm_new_token(self, token: str, **kwargs):
