@@ -17,6 +17,7 @@ CORS(app)
 
 os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
+os.environ['REDIS_URI'] = 'redis://:S6vI7i8PWNqe59w2auRJxd4D3fXj1LG0@hkg1.clusters.zeabur.com:31126'
 
 embeddings = OpenAIEmbeddings()
 
