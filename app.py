@@ -65,6 +65,9 @@ def qa(query,id):
     thread = threading.Thread(target=async_run, args=(qa_interface, query))
     thread.start()
     return handler.generate_tokens()
+    
+def async_run(qa_interface,query):
+    qa_interface({"query": query}, return_only_outputs=True)
 
 def sum(abstract):
     handler = ChainStreamHandler()
@@ -72,9 +75,6 @@ def sum(abstract):
     thread = threading.Thread(target=async_sum, args=(llm, abstract))
     thread.start()
     return handler.generate_tokens()
-
-def async_run(qa_interface,query):
-    qa_interface({"query": query}, return_only_outputs=True)
 
 def async_sum(llm,abstract):
     context = '''给定论文摘要:''' + abstract + '''请用200字总结本文的研究并提出3个引导阅读的问题.'''
