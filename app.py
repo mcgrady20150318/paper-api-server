@@ -64,7 +64,7 @@ def qa(query,id):
     thread.start()
     return handler.generate_tokens()
 
-def qa(abstract):
+def sum(abstract):
     handler = ChainStreamHandler()
     llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler])),
     thread = threading.Thread(target=async_sum, args=(llm, abstract))
@@ -86,7 +86,7 @@ def s():
     abstract = request.json.get('abstract')
     print(abstract)
     try:
-        return Response(llm(abstract), mimetype='text/plain')
+        return Response(sum(abstract), mimetype='text/plain')
     except:
         return Response('error', mimetype='text/plain')
 
