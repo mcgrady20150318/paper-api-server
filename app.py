@@ -98,10 +98,11 @@ def q():
     id = request.json.get('id')
     query = request.json.get('query')
     print(id,query)
-    try:
-        return Response(qa(query,id), mimetype='text/plain')
-    except:
-        return Response('error', mimetype='text/plain')
+    qa(query,id)
+    # try:
+    # return Response(qa(query,id), mimetype='text/plain')
+    # except:
+        # return Response('error', mimetype='text/plain')
 
 if __name__ == '__main__':
     app.run(debug=True, port=os.getenv("PORT", default=5000), host='0.0.0.0')
