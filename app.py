@@ -20,8 +20,10 @@ os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
 
 embeddings = OpenAIEmbeddings()
 
-prompt_template = """你是一个人工智能学者，请根据检索到的论文内容
-    {context}，来回答问题: {question}，答案如下: """
+prompt_template = """你现在是一个人工智能学者，请根据以下内容。
+    {context}，
+    回答问题: {question}
+    中文答案是:"""
 
 PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
 
