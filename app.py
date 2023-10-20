@@ -65,21 +65,18 @@ def qa(query,id):
     return handler.generate_tokens()
 
 def sum(abstract):
-    # handler = ChainStreamHandler()
-    # llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler]))
-    llm = OpenAI(max_tokens=1000)
-    context = '''给定论文摘要:''' + abstract + '''请用200字总结本文的研究并提出3个引导阅读的问题.'''
-    # thread = threading.Thread(target=async_sum, args=(llm, abstract))
-    # thread.start()
-    # return handler.generate_tokens()
-    return llm(context)
+    handler = ChainStreamHandler()
+    llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler]))
+    thread = threading.Thread(target=async_sum, args=(llm, abstract))
+    thread.start()
+    return handler.generate_tokens()
 
 def async_run(qa_interface,query):
     qa_interface({"query": query}, return_only_outputs=True)
 
-# def async_sum(llm,abstract):
-#     context = '''给定论文摘要:请用200字总结本文的研究并提出3个引导阅读的问题.'''
-#     llm(context)
+def async_sum(llm,abstract):
+    context = '''给定论文摘要:''' + abstract + '''请用200字总结本文的研究并提出3个引导阅读的问题.'''
+    llm(context)
 
 @app.route('/', methods=['GET'])
 def _index():
