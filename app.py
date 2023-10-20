@@ -20,8 +20,8 @@ os.environ['OPENAI_API_BASE'] = os.getenv('OPENAI_API_BASE')
 
 embeddings = OpenAIEmbeddings()
 
-prompt_template = """You are an AI expert，please uses the following paper content
-    {context}，to answer the question: {question} the answer is: """
+prompt_template = """你是一个人工智能学者，请根据检索到的论文内容
+    {context}，来回答问题: {question}，答案如下: """
 
 PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
 
@@ -75,7 +75,7 @@ def async_run(qa_interface,query):
     qa_interface({"query": query}, return_only_outputs=True)
 
 def async_sum(llm,abstract):
-    llm({"query": "给定论文摘要:"+abstract+"请用200字总结本文的研究，并提出3个引导阅读的问题."}, return_only_outputs=True)
+    llm("给定论文摘要:"+abstract+"请用200字总结本文的研究，并提出3个引导阅读的问题.")
 
 @app.route('/', methods=['GET'])
 def _index():
