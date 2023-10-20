@@ -64,12 +64,31 @@ def qa(query,id):
     thread.start()
     return handler.generate_tokens()
 
+def qa(abstract):
+    handler = ChainStreamHandler()
+    llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler])),
+    thread = threading.Thread(target=async_sum, args=(llm, abstract))
+    thread.start()
+    return handler.generate_tokens()
+
 def async_run(qa_interface,query):
     qa_interface({"query": query}, return_only_outputs=True)
+
+def async_sum(llm,abstract):
+    llm({"abstract": abstract}, return_only_outputs=True)
 
 @app.route('/', methods=['GET'])
 def _index():
     return 'hello qa'
+
+@app.route('/s', methods=['POST'])
+def s():
+    abstract = request.json.get('abstract')
+    print(abstract)
+    try:
+        return Response(llm(abstract), mimetype='text/plain')
+    except:
+        return Response('error', mimetype='text/plain')
 
 @app.route('/q', methods=['POST'])
 def q():
