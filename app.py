@@ -72,12 +72,13 @@ def sum(abstract):
     return handler.generate_tokens()
 
 def async_run(qa_interface,query):
+    print(query)
     qa_interface({"query": query}, return_only_outputs=True)
 
 def async_sum(llm,abstract):
     print(abstract)
-    context = '''给定论文摘要:'''+abstract['abstract']+'''请用200字总结本文的研究并提出3个引导阅读的问题.'''
-    llm(context)
+    # context = '''给定论文摘要:'''+abstract+'''请用200字总结本文的研究并提出3个引导阅读的问题.'''
+    # llm(context)
 
 @app.route('/', methods=['GET'])
 def _index():
