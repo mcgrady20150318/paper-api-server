@@ -93,9 +93,10 @@ def check_id_redis(id):
 def _index():
     return 'hello qa'
 
-@app.route('/r', methods=['POST'])
+@app.route('/r', methods=['GET'])
 def r():
-    id = request.json.get('id')
+    # id = request.json.get('id')
+    id = request.args.get('id')
     print(id)
     try:
         if check_id_redis(id):
