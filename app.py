@@ -100,11 +100,11 @@ def r():
     print(id)
     try:
         if check_id_redis(id):
-            return jsonify({"result":'true'})
+            return jsonify({"result":1})
         else:
-            return jsonify({"result":'false'})
+            return jsonify({"result":0})
     except:
-        return jsonify({"result":'error'})
+        return jsonify({"result":-1})
 
 @app.route('/s', methods=['POST'])
 def s():
