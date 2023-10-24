@@ -99,11 +99,11 @@ def r():
     print(id)
     try:
         if check_id_redis(id):
-            return Response('true', mimetype='text/plain')
+            return jsonify({"result":'true'})
         else:
-            return Response('false', mimetype='text/plain')
+            return jsonify({"result":'false'})
     except:
-        return Response('error', mimetype='text/plain')
+        return jsonify({"result":'error'})
 
 @app.route('/s', methods=['POST'])
 def s():
