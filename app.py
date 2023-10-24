@@ -11,6 +11,7 @@ from langchain.schema.output import LLMResult
 from typing import Any
 import threading
 from langchain.vectorstores.redis import Redis
+import redis
 
 app = Flask(__name__)
 CORS(app)
@@ -26,6 +27,7 @@ prompt_template = """你现在是一个人工智能学者，请根据以下内�
     中文答案是:"""
 
 PROMPT = PromptTemplate(template=prompt_template, input_variables=["context", "question"])
+rdx = redis.from_url(os.getenv('REDIS_URL'))
 
 class ChainStreamHandler(StreamingStdOutCallbackHandler):
     def __init__(self):
@@ -80,16 +82,27 @@ def async_sum(llm,abstract):
     context = '''给定论文摘要:''' + abstract + '''请用200字总结本文的研究并提出3个引导阅读的问题.'''
     llm(context)
 
+def check_id_redis(id):
+    id_list = rdx.lrange('cached_ids',0,-1)
+    if id.encode('ascii') in id_list:
+        return True
+    else:
+        return False
+
 @app.route('/', methods=['GET'])
 def _index():
     return 'hello qa'
 
 @app.route('/s', methods=['POST'])
 def s():
+    id = request.json.get('id')
     abstract = request.json.get('abstract')
-    print(abstract)
+    print(id,abstract)
     try:
-        return Response(sum(abstract), mimetype='text/plain')
+        if check(id):
+            return Response(sum(abstract), mimetype='text/plain')
+        else:
+            return Response('no', mimetype='text/plain')
     except:
         return Response('error', mimetype='text/plain')
 
