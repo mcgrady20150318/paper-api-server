@@ -93,16 +93,24 @@ def check_id_redis(id):
 def _index():
     return 'hello qa'
 
+@app.route('/r', methods=['POST'])
+def r():
+    id = request.json.get('id')
+    print(id)
+    try:
+        if check_id_redis(id):
+            return Response('true', mimetype='text/plain')
+        else:
+            return Response('false', mimetype='text/plain')
+    except:
+        return Response('error', mimetype='text/plain')
+
 @app.route('/s', methods=['POST'])
 def s():
-    id = request.json.get('id')
     abstract = request.json.get('abstract')
-    print(id,abstract)
+    print(abstract)
     try:
-        if check(id):
-            return Response(sum(abstract), mimetype='text/plain')
-        else:
-            return Response('no', mimetype='text/plain')
+        return Response(sum(abstract), mimetype='text/plain')
     except:
         return Response('error', mimetype='text/plain')
 
