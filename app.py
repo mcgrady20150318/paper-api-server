@@ -73,7 +73,7 @@ def async_run(qa_interface,query):
 
 def sum(abstract):
     handler = ChainStreamHandler()
-    llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler]))
+    llm = OpenAI(model_name='gpt-3.5-turbo',max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler]))
     thread = threading.Thread(target=async_sum, args=(llm, abstract))
     thread.start()
     return handler.generate_tokens()
