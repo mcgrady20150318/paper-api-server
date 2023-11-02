@@ -59,7 +59,7 @@ def qa(query,id):
     retriever = vector_index.as_retriever(search_type="similarity", search_kwargs={"k": 1})
     chain_type_kwargs = {"prompt": PROMPT}
     qa_interface = RetrievalQA.from_chain_type(
-        llm = OpenAI(max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler])),
+        llm = OpenAI(model_name='gpt-3.5-turbo',max_tokens=1000,streaming=True,callback_manager=CallbackManager([handler])),
         chain_type="stuff",
         retriever=retriever,
         chain_type_kwargs=chain_type_kwargs
